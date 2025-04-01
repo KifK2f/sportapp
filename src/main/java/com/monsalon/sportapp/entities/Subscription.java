@@ -20,21 +20,23 @@ public class Subscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Le client est obligatoire.")
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-
+    
+    @NotNull(message = "Le pack est obligatoire.")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "pack_id", nullable = false)
     private Pack pack;
+    
 
     @NotNull(message = "Start date is required.")
-    @PastOrPresent(message = "Start date cannot be in the future.")
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
     @NotNull(message = "End date is required.")
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "endDate", nullable = false)
     private LocalDate endDate;
 
     @NotNull(message = "Status is required.")

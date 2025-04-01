@@ -31,19 +31,24 @@ public class SubscriptionService {
 
     // Ajouter un abonnement
     public Subscription addSubscription(Subscription subscription) {
-        validateDates(subscription.getStartDate(), subscription.getEndDate());
-
+        // Vérifier que la startDate n'est pas après la endDate
+        if (subscription.getStartDate().isAfter(subscription.getEndDate())) {
+            throw new IllegalArgumentException("La date de début ne peut pas être après la date de fin.");
+        }
+    
+        // Vérifier que le client et le pack existent
         Customer customer = customerRepository.findById(subscription.getCustomer().getId())
-                .orElseThrow(() -> new RuntimeException("Customer not found with ID: " + subscription.getCustomer().getId()));
-
+                .orElseThrow(() -> new RuntimeException("Client non trouvé avec l'ID : " + subscription.getCustomer().getId()));
+    
         Pack pack = packRepository.findById(subscription.getPack().getId())
-                .orElseThrow(() -> new RuntimeException("Pack not found with ID: " + subscription.getPack().getId()));
-
+                .orElseThrow(() -> new RuntimeException("Pack non trouvé avec l'ID : " + subscription.getPack().getId()));
+    
         subscription.setCustomer(customer);
         subscription.setPack(pack);
-
+    
         return subscriptionRepository.save(subscription);
     }
+    
 
     // Récupérer tous les abonnements
     public List<Subscription> getAllSubscriptions() {

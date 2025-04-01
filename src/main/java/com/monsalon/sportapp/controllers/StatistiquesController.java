@@ -5,6 +5,7 @@ import com.monsalon.sportapp.services.SubscriptionExportService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +16,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/api/statistics")
+// @CrossOrigin(origins = "http://localhost:4200")
 public class StatistiquesController {
 
     private final StatistiquesService statistiquesService;

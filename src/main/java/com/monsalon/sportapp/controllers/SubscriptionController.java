@@ -10,11 +10,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/subscriptions")
+// @CrossOrigin(origins = "http://localhost:4200")
 public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
-    @Autowired
+    
     public SubscriptionController(SubscriptionService subscriptionService) {
         this.subscriptionService = subscriptionService;
     }
@@ -41,12 +42,16 @@ public class SubscriptionController {
     @PostMapping
     public ResponseEntity<Subscription> addSubscription(@RequestBody Subscription subscription) {
         try {
+            // 🔍 Debug: Afficher les données reçues
+            System.out.println("🔍 Requête reçue: " + subscription);
+            
             Subscription createdSubscription = subscriptionService.addSubscription(subscription);
             return ResponseEntity.ok(createdSubscription);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(null);
         }
     }
+    
 
     // Mettre à jour un abonnement
     @PutMapping("/{id}")

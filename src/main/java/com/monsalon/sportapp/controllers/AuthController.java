@@ -23,6 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
     private final UserService userService;
@@ -74,13 +75,18 @@ public class AuthController {
 
         User user = existingUser.get();
 
+        // ✅ Ajouter l'authentification manquante ici ⬇️
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(user.getEmail(), loginRequest.getPassword());
+        authenticationManager.authenticate(authenticationToken);
+
         // ✅ Générer un nouveau token
         String newToken = jwtTokenUtil.generateToken(user.getEmail());
+        System.out.println("🚀 Nouveau token généré: " + newToken);
 
-        // ✅ Invalider l'ancien token s'il y en avait un
+        // ✅ Vérifier si l'utilisateur a déjà un token stocké
         if (user.getLatestToken() != null) {
             jwtTokenService.invalidateToken(user.getLatestToken());
-
         }
 
         // ✅ Enregistrer le nouveau token
@@ -89,6 +95,7 @@ public class AuthController {
 
         return ResponseEntity.ok(Collections.singletonMap("token", "Bearer " + newToken));
     }
+
 
 
     // ✅ 3️⃣ Déconnexion (Clear Security Context)
